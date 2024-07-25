@@ -2,10 +2,18 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { redirect } from "react-router-dom";
 import Cookies from "js-cookie";
-export default function Login() {
-    
+import { Check } from "lucide-react";
+
+import { ToastContainer, toas, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
+export default function Login() {    
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    const notify = (typeNot) => toast("Failed to login!", {
+        type: typeNot
+    })
 
     function onSubmit() {
         axios.post('http://192.168.0.103:80/vfu', {
@@ -15,15 +23,20 @@ export default function Login() {
             if(res.data == 'Verificado!') {
                 Cookies.set('auth', 'ok', { expires: 7})
                 Cookies.set('user', email.split('.')[0])
+                
+                setTimeout(() => notify('success'), 1000);
+                
                 window.location.href = '/home'
+                
             } else {
-                alert(2);
+                notify('error');
             }
         })
     }
 
     return (
         <div className="flex items-center justify-center">
+            <ToastContainer />
             <div className="logger p-20 rounded-lg m-auto shadow-zinc-400 shadow-md" style={{width: 585, height: 690}}>
                 <ul className="flex flex-col align-middle justify-between bg-white relative" style={{height: '100%'}}>
                     <div className="headline space-y-4">

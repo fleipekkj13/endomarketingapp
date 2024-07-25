@@ -2,6 +2,8 @@ import axios from "axios";
 import Cookies from "js-cookie"
 import { Delete, X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { ToastContainer, toas, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 /*
 
@@ -35,10 +37,19 @@ function Authenticated() {
 
     const [quadros, setQuadros] = useState([]);
 
+
+    const notify = (typeNot, messsage) => toast(messsage, {
+        type: typeNot
+    })
+
+
     useEffect(() => {
         axios.get('http://192.168.0.103:80/quadros').then((res) => {
             setQuadros(res.data)
         })
+        notify('success', 'Success to login! Welcome back.')
+
+
     }, [])
     function createTask() {
 
@@ -86,6 +97,8 @@ function Authenticated() {
     return(
         <div>
             <h1 className="text-center text-2xl mt-10 mb-10">WelcomeBack Mr.{user.toUpperCase()}</h1>
+
+            <ToastContainer />
             <div className="flex flex-1">
                 <ul className="grid grid-cols-1 w-1/3 gap-5 items-center m-auto">
 
